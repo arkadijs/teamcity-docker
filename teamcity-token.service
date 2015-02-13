@@ -1,0 +1,16 @@
+[Unit]
+Description=Save TeamCity superuser auth token in Etcd
+Requires=etcd.service
+After=etcd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/bin/sh -c 'while :; do \
+    token=$(docker logs development-teamcity-server 2>&1 | grep -F " Super user authentication token: " | tail -1 | sed -re "s/.*token: \\\"(.+)\\\".*/\1/"); \
+    if test -n "$token"; then etcdctl set /containers/teamcity_token $token; break; fi; \
+    sleep 30; \
+  done'
+
+[X-Fleet]
+MachineOf=teamcity-server.service
