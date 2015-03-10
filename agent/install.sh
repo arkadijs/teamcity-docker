@@ -3,7 +3,7 @@
 user=teamcity
 agent=/opt/TeamCityAgent
 
-useradd -r -U -m -s /bin/bash -p '*' -c "TeamCity Agent" $user
+useradd -r -U -G docker -m -s /bin/bash -p '*' -c "TeamCity Agent" $user
 mkdir -p $agent
 unzip /tmp/buildAgent.zip -d $agent
 rm /tmp/buildAgent.zip

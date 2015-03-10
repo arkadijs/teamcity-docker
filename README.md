@@ -1,6 +1,6 @@
 #### [TeamCity] server and agent Docker images
 
-The images is based on [phusion/baseimage] so it has proper boot sequence and  process supervision.
+The images is based on [phusion/baseimage] so it has proper boot sequence and  process supervision. Agent is capable of building Docker images by leveraging Docker in Docker.
 
 phusion/baseimage is Ubuntu 14.04 LTS based image with [runit] init, cron, syslog-ng, and [sshd].
 
@@ -17,8 +17,11 @@ Start agent(s):
     docker run -ti --rm \
         -p 9090:9090 \
         -v /tmp/teamcity-agent:/data \
+        -v /tmp/teamcity-agent-docker:/var/lib/docker \
         -e TEAMCITY_SERVER=http://192.168.1.2:8111/ \
         -e AGENT_NAME=agent-1 \
+        -e STORAGE_DRIVER=aufs \
+        -e DOCKER_ARGS="--insecure-registry $DEV_REGISTRY" \
         arkadi/teamcity-agent \
         /sbin/my_init -- bash -l
 
@@ -26,6 +29,7 @@ Start agent(s):
 - The server data will be under /var/teamcity.
 - TEAMCITY_SERVER and AGENT_NAME are mandatory. AGENT_NAME must be unique.
 - Agent's `-p 9090:9090` mapping is not required when running on single machine.
+- Default STORAGE_DRIVER is btrfs.
 - `/sbin/my_init -- bash -l` is optional to enter container with shell at startup.
 - [sshd] is not enabled.
 - Superuser login into TeamCity requires auth token. Grab it from server container's log. Check [teamcity-token.service] for example.

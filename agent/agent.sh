@@ -16,12 +16,13 @@ fi
 
 mkdir -p $data/logs $data/work $data/temp $data/system
 chown -R $USER:$USER $data
+chmod go+rx /data
 sed -e "s|{{TEAMCITY_SERVER}}|$TEAMCITY_SERVER|" \
     -e "s|{{AGENT_NAME}}|$AGENT_NAME|" < $agent/conf/buildAgent.custom.properties > $agent/conf/buildAgent.properties
 chown $USER:$USER $agent/conf/buildAgent.properties
 
 cd $agent/bin
-chpst -u $USER:$USER ./agent.sh start
+chpst -u $USER:docker ./agent.sh start
 i=0
 set +x
 while :; do
