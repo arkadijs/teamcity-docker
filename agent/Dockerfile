@@ -9,7 +9,7 @@ RUN echo 'deb http://get.docker.io/ubuntu docker main' > /etc/apt/sources.list.d
     && apt-get clean \
     && find /var/lib/apt/lists -type f -delete
 
-ADD buildAgent-9.0.2.zip /tmp/buildAgent.zip
+ADD buildAgent-9.0.3.zip /tmp/buildAgent.zip
 ADD install.sh /tmp/
 RUN /tmp/install.sh && rm /tmp/install.sh
 

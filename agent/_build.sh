@@ -1,5 +1,5 @@
 #!/bin/sh -xe
-v=9.0.2-2
+v=9.0.3-1
 tag=arkadi/teamcity-agent
 tag2=$DEV_REGISTRY/$tag
 docker build -t $tag:$v .
